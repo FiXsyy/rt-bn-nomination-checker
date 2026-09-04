@@ -10,8 +10,7 @@ usernames = ["Aniviuh", "Cardboard_Dragon", "extra", "FiXsy", "goink", "Knight",
 def main():
     cls()
     print("Wait while we fetch the nomination data...\n")
-    
-    update_json(json_file_path, usernames)
+
     nominators = get_nomination_data(json_file_path)
     
     while True:
@@ -68,38 +67,47 @@ def display_nominated_maps(nominators, isRecent: bool = False):
         user_input = input(f"\nPress Enter to continue to the next profile... or type 'exit' to quit: ({i + 1}/{number_of_profiles}) ")
         if user_input.lower() == 'exit':
             break
-    
 
+
+def get_nominators():
+    nominators_json = rt.nominators().nominators
+    
+    nominators = []
+    
+    for nominator in nominators_json:
+        if not nominator.is_nominator or nominator.is_admin: continue
+        
+        profile = {
+            "username": nominator.username,
+            "userid": nominator.user_id,
+            "role": "NAT" if nominator.is_rank_manager else "BN"
+        }
+        
+        nominators.append(profile)
+    
+    return nominators
+        
+        
 def get_nomination_data(file_path):
     nominators = []
     
-    with open(file_path, "r+", encoding='utf-8') as f:
-        data = json.load(f)
-        profiles = data.get("nominators", [])
+    nominators_list = get_nominators()
     
-        for profile in profiles:        
-            # if profile doesn't have a userid, look it up and add it to the json file
-            if profile.get("userid") == "":
-                username = profile.get("username")
-                user = rt.user_lookup(username, 1)
-                profile["userid"] = user[0].user_id
-                f.seek(0)
-                json.dump(data, f, indent=4)
+    for nominator in nominators_list:
+        maps, maps_count = get_nominated_maps(nominator['userid'])
+        recent_maps, recent_maps_count = get_only_recently_nominated_maps(maps)
+        days_remaining = get_days_remaining(recent_maps, recent_maps_count)
         
-            maps, maps_count = get_nominated_maps(profile['userid'])
-            recent_maps, recent_maps_count = get_only_recently_nominated_maps(maps)
-            days_remaining = get_days_remaining(recent_maps, recent_maps_count)
-            
-            nominators.append({
-                "username": profile['username'],
-                "role": profile['role'],
-                "maps": maps,
-                "maps_count": maps_count,
-                "recent_maps": recent_maps,
-                "recent_maps_count": recent_maps_count,
-                "days_remaining": days_remaining
-            })
-    
+        nominators.append({
+            "username": nominator['username'],
+            "role": nominator['role'],
+            "maps": maps,
+            "maps_count": maps_count,
+            "recent_maps": recent_maps,
+            "recent_maps_count": recent_maps_count,
+            "days_remaining": days_remaining
+        })
+
     sorted_nominators = sorted(sorted(nominators, key=lambda x: x['recent_maps_count'], reverse=False), key=lambda x: x['days_remaining'], reverse=False)
     
     return sorted_nominators
@@ -112,7 +120,7 @@ def get_days_remaining(recent_maps, recent_maps_count):
             from pytz import timezone
             
             nominated_at = datetime.strptime(recent_maps[2]["nominated_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
-            return (timezone('utc').localize(datetime.now()) - nominated_at.replace(tzinfo=timezone('utc'))).days
+            return 90 - (timezone('utc').localize(datetime.now()) - nominated_at.replace(tzinfo=timezone('utc'))).days
     return 0
 
 
@@ -157,71 +165,6 @@ def get_nominated_maps(user_id):
         })
     
     return maps, len(maps)
-
-            
-def update_json(file_path, usernames=None):
-    # Check if file exists
-    if os.path.exists(file_path):
-        try:
-            with open(file_path, 'r', encoding='utf-8') as file:
-                content = json.load(file)
-                if "nominators" not in content:
-                    content["nominators"] = []
-        except json.JSONDecodeError:
-            print(f"Warning: {file_path} contains invalid JSON. Creating new file with default content.")
-            content = {"nominators": []}
-    else:
-        directory = os.path.dirname(file_path)
-        if directory and not os.path.exists(directory):
-            os.makedirs(directory)
-        content = {"nominators": []}
-    
-    # If no usernames provided, just ensure file exists and return
-    if usernames is None:
-        with open(file_path, 'w', encoding='utf-8') as file:
-            json.dump(content, file, indent=4, ensure_ascii=False)
-        return content
-    
-    usernames_set = set(usernames)
-    
-    # Filter existing users: keep only those in the new list
-    kept_users = []
-    removed_users = []
-    
-    for entry in content["nominators"]:
-        if entry["username"] in usernames_set:
-            kept_users.append(entry)
-        else:
-            removed_users.append(entry["username"])
-    
-    # Add new users that don't already exist
-    existing_usernames = {entry["username"] for entry in kept_users}
-    added_users = []
-    
-    for username in usernames:
-        if username not in existing_usernames:
-            kept_users.append({
-                "username": username,
-                "userid": "",
-                "role": "BN"
-            })
-            added_users.append(username)
-            existing_usernames.add(username)
-    
-    # Update content
-    content["nominators"] = kept_users
-    
-    # Write back to file
-    with open(file_path, 'w', encoding='utf-8') as file:
-        json.dump(content, file, indent=4, ensure_ascii=False)
-    
-    # Print summary
-    if removed_users:
-        print(f"Removed users ({len(removed_users)}): {', '.join(removed_users)}")
-    if added_users:
-        print(f"Added users ({len(added_users)}): {', '.join(added_users)}")
-    if not removed_users and not added_users:
-        print("No changes made to the nominators list.")
 
 
 if __name__ == "__main__":

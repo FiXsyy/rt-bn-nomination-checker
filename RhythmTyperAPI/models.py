@@ -705,8 +705,8 @@ class Judgements:
     good: int
     ok: int
     miss: int
-    caught: int
-    catch_miss: int
+    caught: int | None
+    catch_miss: int | None
 
     @classmethod
     def from_dict(cls, data: dict):
@@ -715,8 +715,8 @@ class Judgements:
             good=data["good"],
             ok=data["ok"],
             miss=data["miss"],
-            caught=data["caught"],
-            catch_miss=data["catch_miss"]
+            caught=data.get("caught"),
+            catch_miss=data.get("catch_miss")
         )
 
 
@@ -874,4 +874,33 @@ class UserSearchResult:
             total_pp=data["totalPP"],
             global_rank=data["globalRank"],
             country=data["country"]
+        )
+
+
+@dataclass
+class Nominators:
+    nominators: list[NominatorPermissions]
+    count: int
+
+
+@dataclass
+class NominatorPermissions:
+    user_id: str
+    username: str
+    discord_id: int
+    is_nominator: bool
+    is_rank_manager: bool
+    is_admin: bool
+    banned: bool
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            user_id=data["userId"],
+            username=data["username"],
+            discord_id=data["discordId"],
+            is_nominator=data["isNominator"],
+            is_rank_manager=data["isRankManager"],
+            is_admin=data["isAdmin"],
+            banned=data["banned"]
         )

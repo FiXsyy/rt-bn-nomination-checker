@@ -4,7 +4,7 @@ from .helper import find_new_data, parse_timestamp
 from .models import Grades, RankHistoryEntry, Play, RecentActivity, UserProfile, Score, FirstPlaceScores, \
     MostPlayedBeatmap, CustomDifficulty, VersionHistory, Beatmap, BeatmapList, GlobalLeaderboard, CountryLeaderboard, \
     TopPlaysLeaderboard, BeatmapDifficulty, LeaderboardScore, Comment, UnplayedDifficulty, UnplayedDifficulties, \
-    BestScore, BestScores, UserSearchResult
+    BestScore, BestScores, UserSearchResult, Nominators, NominatorPermissions
 
 
 class RhythmTyperClient():
@@ -344,3 +344,12 @@ class RhythmTyperClient():
 
         response["scores"] = [BestScore.from_dict(item) for item in response["scores"]]
         return BestScores(**response)
+
+    def nominators(self) -> Nominators:
+        """Returns all the nominators and their permissions."""
+        response = self.get(
+            f"v2/nominators"
+        )
+
+        response["nominators"] = [NominatorPermissions.from_dict(item) for item in response["nominators"]]
+        return Nominators(**response)
