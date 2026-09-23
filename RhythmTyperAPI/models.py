@@ -344,10 +344,10 @@ class Beatmap:
     background_image_url: str
     background_urls: list[str]
     rtm_url: str
-    rtm_size: int
+    # rtm_size: int
     version: int
     play_count: int
-    download_count: int
+    # download_count: int
     favorite_count: int
     nomination_count: int
     version_history: list[VersionHistory]
@@ -356,7 +356,7 @@ class Beatmap:
     uploaded_at: datetime
     ranked_date: datetime | None
     qualified_date: datetime | None
-    last_played: datetime
+    # last_played: datetime
     difficulties: list[CustomDifficulty]
     nominated_at: datetime | None
 
@@ -392,11 +392,11 @@ class Beatmap:
             version=data["version"],
             has_video=data["hasVideo"],
             has_custom_hitsounds=data["hasCustomHitsounds"],
-            rtm_size=data["rtmSize"],
+            # rtm_size=data["rtmSize"],
             # search_text=data["searchText"],
             # search_tokens=data["searchTokens"],
             # uploaded_by=data["uploadedBy"],
-            download_count=data["downloadCount"],
+            # download_count=data["downloadCount"],
             status=data["status"],
             # rating=data["rating"],
             # rating_count=data["ratingCount"],
@@ -407,7 +407,7 @@ class Beatmap:
             favorite_count=data["favoriteCount"],
             difficulties=data["difficulties"],
             play_count=data["playCount"],
-            last_played=data["lastPlayed"],
+            # last_played=data["lastPlayed"],
             ranked=data["ranked"],
             nomination_count=data["nominationCount"],
             nominations=data["nominations"],
@@ -880,7 +880,7 @@ class UserSearchResult:
 @dataclass
 class Nominators:
     nominators: list[NominatorPermissions]
-    count: int
+    # count: int
 
 
 @dataclass

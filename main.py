@@ -1,5 +1,5 @@
 from RhythmTyperAPI.client import RhythmTyperClient
-import json, os
+import os
 
 rt = RhythmTyperClient()
 
