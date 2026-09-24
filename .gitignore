@@ -3,4 +3,4 @@ RhythmTyperAPI\__pycache__
 
 dist
 build
-main.spec
+*.spec
