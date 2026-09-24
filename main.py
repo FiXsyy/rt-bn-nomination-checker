@@ -70,7 +70,7 @@ def display_nominated_maps(nominators, isRecent: bool = False):
 
 
 def get_nominators():
-    nominators_json = rt.nominators().nominators
+    nominators_json = rt.nominators()
     
     nominators = []
     
