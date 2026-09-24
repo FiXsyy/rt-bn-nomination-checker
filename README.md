@@ -16,5 +16,6 @@ A small python script that allows you to easily check current Rhythm Typer Beatm
 
 ## Authors
 
-- [@FiXsyy](https://github.com/FiXsyy)
-
+<ul> <img width="256px" alt="rt-nomination-checker-icon" src="https://github.com/user-attachments/assets/447a0bc8-f75d-4cf7-a7d9-89b97d93352b"  align="right"/>
+  <li><a href="https://github.com/FiXsyy">@FiXsyy</a></li>
+</ul> 
