@@ -1,6 +1,6 @@
 [project]
 name = "rt-nomination-checker"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
     rhythmtyperapi==0.1.5
     pytz==2026.3.post1
