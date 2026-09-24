@@ -1,0 +1,24 @@
+[project]
+name = "rt-nomination-checker"
+version = "0.1.0"
+dependencies = [
+    rhythmtyperapi==0.1.5
+    pytz==2026.3.post1
+    pyinstaller==6.22.3
+]
+requires-python = ">=3.14"
+authors = [
+    {name = "FiXsy"}
+]
+readme = "README.md"
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+description = "Recent Nomination Checker for Rhythm Typer"
+classifiers = [
+  "Programming Language :: Python :: 3.14"
+]
+keywords = ["rt", "rhythm", "typer", "beatmap", "nomination", "nominator", "bn", "checker"]
+
+[project.urls]
+Homepage = "https://github.com/FiXsyy/rt-nomination-checker"
+Issues = "https://github.com/FiXsyy/rt-nomination-checker/issues"

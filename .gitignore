@@ -1,2 +1,6 @@
 .venv
 RhythmTyperAPI\__pycache__
+
+dist
+build
+main.spec

@@ -16,7 +16,7 @@ def main():
     while True:
         cls()
         
-        print("Welcome to the RhythmTyper BN Nomination Tracker!\n")
+        print("Welcome to the Rhythm Typer Nomination Checker!\n")
         print("1. Display all profiles summary")
         print("2. Display only recently nominated maps (last 90 days)")
         print("3. Display all nominated maps")
@@ -119,7 +119,7 @@ def get_days_remaining(recent_maps, recent_maps_count):
             from datetime import datetime
             from pytz import timezone
             
-            nominated_at = datetime.strptime(recent_maps[2]["nominated_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            nominated_at = datetime.strptime(str(recent_maps[2]["nominated_at"]), "%Y-%m-%d %H:%M:%S.%f+00:00")
             return 90 - (timezone('utc').localize(datetime.now()) - nominated_at.replace(tzinfo=timezone('utc'))).days
     return 0
 
@@ -136,7 +136,7 @@ def get_only_recently_nominated_maps(maps: list, days: int = 90):
     
     for map in maps:
         if map["nominated_at"] is not None:
-            nominated_at = datetime.strptime(map["nominated_at"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            nominated_at = datetime.strptime(str(map["nominated_at"]), "%Y-%m-%d %H:%M:%S.%f+00:00")
             if nominated_at.replace(tzinfo=timezone('utc')) >= timezone('utc').localize(datetime.now()) - timedelta(days=days):
                 filtered_maps.append(map)
         else:
