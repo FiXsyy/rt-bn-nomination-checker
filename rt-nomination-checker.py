@@ -3,15 +3,12 @@ import os
 
 rt = RhythmTyperClient()
 
-json_file_path = "./bn-list.json"
-usernames = ["Aniviuh", "Cardboard_Dragon", "extra", "FiXsy", "goink", "Knight", "olc", "Riguren", "Yomia", "zabrid", "Piger"]
-
 
 def main():
     cls()
     print("Wait while we fetch the nomination data...\n")
 
-    nominators = get_nomination_data(json_file_path)
+    nominators = get_nomination_data()
     
     while True:
         cls()
@@ -88,7 +85,7 @@ def get_nominators():
     return nominators
         
         
-def get_nomination_data(file_path):
+def get_nomination_data():
     nominators = []
     
     nominators_list = get_nominators()
